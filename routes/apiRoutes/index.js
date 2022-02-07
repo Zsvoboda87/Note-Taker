@@ -1,7 +1,7 @@
 const path = require('path');
 const router = require('express').Router();
 const fs = require('fs');
-const uuid = require('./helpers/uuid');
+const uuid = require('../../helpers/uuid');
 
 
 
@@ -70,8 +70,43 @@ router.post("/api/notes", (req, res) => {
 
 });
 
-router.delete("/api/notes", (req, res) => {
- console.log("delete")
+router.delete("/api/notes/:id", (req, res) => {
+  const incomingID = req.params.id
+  console.log(incomingID)
+
+
+  fs.readFile('./db/db.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      const parsedNotes = JSON.parse(data)
+
+      for (i = 0; i < parsedNotes.length; i++) {
+        console.log(parsedNotes[i].id)
+        if (parsedNotes[i].id == incomingID) {
+          parsedNotes.splice(i, 1);
+          console.log(parsedNotes)
+
+          fs.writeFile(
+            './db/db.json',
+            JSON.stringify(parsedNotes, null, 4),
+            (writeErr) =>
+              writeErr
+                ? console.error(writeErr)
+                : console.info('Successfully updated reviews!')
+          );
+        }
+      }
+    }
+  });
+
+  const response = {
+    status: 'success',
+  };
+
+  console.log(response);
+  res.json(response);
+
 });
 
 

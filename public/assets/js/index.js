@@ -1,4 +1,3 @@
-const uniqid = require('uniqid');
 
 let noteTitle;
 let noteText;
@@ -45,11 +44,13 @@ const saveNote = (note) =>
   });
 
 const deleteNote = (id) =>
+  
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
+    // body: JSON.stringify(id)
   });
 
 const renderActiveNote = () => {

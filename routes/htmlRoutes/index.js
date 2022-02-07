@@ -9,10 +9,6 @@ const router = require('express').Router();
     res.sendFile(path.join(__dirname, '../../public/index.html'));
   });
 
-  // router.get("/api/notes", (req, res) => {
-  //   let results = db ;
-  //   res.json(results);
-   
-  // });
+
 
 module.exports = router;
