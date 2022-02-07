@@ -1,26 +1,37 @@
 const path = require('path');
 const router = require('express').Router();
-const db = require("../../db/db");
 const fs = require('fs');
+const uuid = require('./helpers/uuid');
+
 
 
 
 router.get("/api/notes", (req, res) => {
-    let results = db;
-    res.json(results);
+
+  fs.readFile('./db/db.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      // Convert string into JSON object
+      const parsedNotes = JSON.parse(data);
+
+      res.json(parsedNotes);
+    }
+  });
 });
 
 router.post("/api/notes", (req, res) => {
 
-      // Destructuring assignment for the items in req.body
+  // Destructuring assignment for the items in req.body
   const { title, text } = req.body;
 
   // If all the required properties are present
   if (title && text) {
     // Variable for the object we will save
-    const newNote= {
+    const newNote = {
       title,
       text,
+      id: uuid(),
     };
 
     // Obtain existing reviews
@@ -56,9 +67,12 @@ router.post("/api/notes", (req, res) => {
   } else {
     res.json('Error in posting review');
   }
-  
+
 });
 
+router.delete("/api/notes", (req, res) => {
+ console.log("delete")
+});
 
 
 module.exports = router;
